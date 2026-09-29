@@ -1,0 +1,24 @@
+@model List<RecommendationResult>
+<h3>Your top career matches</h3>
+<a href="/" class="btn btn-outline-secondary btn-sm mb-3">← Change skills</a>
+@foreach (var r in Model)
+{
+  var color = r.Score >= 75 ? "success" : r.Score >= 50 ? "warning" : "danger";
+  var width = r.Score.ToString(System.Globalization.CultureInfo.InvariantCulture);
+  <div class="card mb-3 shadow-sm"><div class="card-body">
+    <div class="d-flex justify-content-between">
+      <h5>@r.Career.Name</h5><span class="fw-bold">@r.Score%</span>
+    </div>
+    <div class="progress mb-2"><div class="progress-bar bg-@color" style="width:@(width)%"></div></div>
+    <p class="text-muted mb-2">@r.Career.Description</p>
+    @if (r.Strengths.Any()) { <div>✅ <b>Strengths:</b> @string.Join(", ", r.Strengths)</div> }
+    @if (r.Gaps.Any())
+    {
+      <div class="mt-2">📚 <b>Skills to improve:</b>
+        <ul class="mb-0">
+          @foreach (var g in r.Gaps) { <li>@g.Skill: level @g.Current → @g.Required</li> }
+        </ul>
+      </div>
+    }
+  </div></div>
+}
